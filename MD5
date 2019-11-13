@@ -1,0 +1,15 @@
+2f9516f0de88325c640488e8336a6ca8 *DESCRIPTION
+2dbe9d7897f8a307c96c1d2a605f5aff *LICENSE
+05194ab0498c2dc0bf447d40e4d1874e *NAMESPACE
+0b45a9af31fc25400c4ded5a82b14f46 *R/docknitr.R
+e49371bfa79204383f4e93cd0b6d9c17 *README.md
+f6426557c21d9b3216e874e3773a72f2 *build/vignette.rds
+9350b1848aad2eb30d20a62d27e5b6ea *inst/doc/custom-images.html
+616941d2c7124d75436d65d25ba56890 *inst/doc/custom-images.html.asis
+0ad641f6c614239349b2038480a519cb *inst/doc/docknitr.html
+df72be2bd8084ea9d6bba6062b38419e *inst/doc/docknitr.html.asis
+3c57ebfc1f42d8834b57721537ea454d *man/docker_alias.Rd
+616941d2c7124d75436d65d25ba56890 *vignettes/custom-images.html.asis
+df72be2bd8084ea9d6bba6062b38419e *vignettes/docknitr.html.asis
+fbe4208606bd8c6a555bc4f6f57e4e64 *vignettes/pyseer/Dockerfile
+92935f916bb5b6027d80752259e089d0 *vignettes/python3-munch/Dockerfile
