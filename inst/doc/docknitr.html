@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -13,7 +12,7 @@
 
 <meta name="author" content="Ben Artin" />
 
-<meta name="date" content="2019-11-04" />
+<meta name="date" content="2020-01-08" />
 
 <title>docknitr: Using Docker in Rmarkdown</title>
 
@@ -304,7 +303,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">docknitr: Using Docker in Rmarkdown</h1>
 <h4 class="author">Ben Artin</h4>
-<h4 class="date">2019-11-04</h4>
+<h4 class="date">2020-01-08</h4>
 
 
 
@@ -331,7 +330,7 @@ This source file has all sorts of Rmarkdown-inside-Rmarkdown and Docker-inside-D
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1"><span class="ex">docker</span> run python:3 python -c <span class="st">&#39;print(&quot;Python in Docker&quot;)&#39;</span></a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="co">#&gt; Unable to find image &#39;python:3&#39; locally</span></a>
 <a class="sourceLine" id="cb2-3" title="3"><span class="co">#&gt; 3: Pulling from library/python</span></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt; Digest: sha256:514a95a32b86cafafefcecc28673bb647d44c5aadf06203d39c43b9c3f61ed52</span></a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt; Digest: sha256:ce94b081f1ffebee1121e507173f12d9d95dff3ffdd979b92b91239198330de5</span></a>
 <a class="sourceLine" id="cb2-5" title="5"><span class="co">#&gt; Status: Downloaded newer image for python:3</span></a>
 <a class="sourceLine" id="cb2-6" title="6"><span class="co">#&gt; Python in Docker</span></a></code></pre></div>
 <p>The output you see shows Docker downloading a pre-made copy of Python 3 (regardless of which operating system you are on and which version of Python you already have installed outside of Docker) and then running some Python code in it to print “Python in Docker”.</p>
@@ -346,26 +345,26 @@ This source file has all sorts of Rmarkdown-inside-Rmarkdown and Docker-inside-D
 </div>
 <div id="using-docker-with-rmarkdown" class="section level2">
 <h2>Using docker with Rmarkdown</h2>
-<p>The actual thing we are interested in here is using Docker from inside Rmarkdown. To do this, you first have to load the <code>docknitr</code> package:</p>
+<p>The actual thing we are interested in here is using Docker inside Rmarkdown. To do this, you first have to load the <code>docknitr</code> package:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">library</span>(docknitr)</a></code></pre></div>
 <p>Doing this enables <code>docker</code> as an option inside Rmarkdown. Let’s run some Python code in Rmarkdown using docker:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="st">```</span><span class="dt">{r engine=&quot;docker&quot;, image=&quot;python:3&quot;}</span></a>
 <a class="sourceLine" id="cb5-2" title="2"><span class="dt">import sys</span></a>
 <a class="sourceLine" id="cb5-3" title="3"><span class="dt">print(&quot;Python in Docker in Rmarkdown, version %s&quot; % sys.version)</span></a>
 <a class="sourceLine" id="cb5-4" title="4"><span class="st">```</span></a></code></pre></div>
-<pre><code>#&gt; Python in Docker in Rmarkdown, version 3.8.0 (default, Oct 17 2019, 05:36:36) 
+<pre><code>#&gt; Python in Docker in Rmarkdown, version 3.8.1 (default, Jan  3 2020, 22:44:00) 
 #&gt; [GCC 8.3.0]</code></pre>
 <p>What if we want to use Python v2 instead? Easy:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="st">```</span><span class="dt">{r engine=&quot;docker&quot;, image=&quot;python:2&quot;}</span></a>
 <a class="sourceLine" id="cb7-2" title="2"><span class="dt">import sys</span></a>
 <a class="sourceLine" id="cb7-3" title="3"><span class="dt">print(&quot;Python in Docker in Rmarkdown, version %s&quot; % sys.version)</span></a>
 <a class="sourceLine" id="cb7-4" title="4"><span class="st">```</span></a></code></pre></div>
-<pre><code>#&gt; Python in Docker in Rmarkdown, version 2.7.17 (default, Oct 23 2019, 23:58:07) 
+<pre><code>#&gt; Python in Docker in Rmarkdown, version 2.7.17 (default, Dec 28 2019, 07:48:40) 
 #&gt; [GCC 8.3.0]</code></pre>
 <p>If you’ve ever tried to install multiple versions of Python on one computer, you can appreciate how unexpectedly simple this was. (If you haven’t, lucky you.)</p>
 <div id="technical-details" class="section level3">
 <h3>Technical details</h3>
-<p>Under the hood, <code>docknitr</code> uses <code>system2()</code> to run <code>docker run --interactive IMAGE</code>, and passes the code chunk on the standard input. The standard output is then returned in Rmarkdown output.</p>
+<p>Under the hood, <code>docknitr</code> uses <code>sys::exec_wait()</code> to run <code>docker run --interactive IMAGE</code>, and passes the code chunk on the standard input. The standard output is then returned in Rmarkdown output.</p>
 </div>
 </div>
 <div id="file-sharing" class="section level2">
@@ -375,9 +374,9 @@ This source file has all sorts of Rmarkdown-inside-Rmarkdown and Docker-inside-D
 <a class="sourceLine" id="cb9-2" title="2"><span class="dt">import os</span></a>
 <a class="sourceLine" id="cb9-3" title="3"><span class="dt">print(os.listdir())</span></a>
 <a class="sourceLine" id="cb9-4" title="4"><span class="st">```</span></a></code></pre></div>
-<pre><code>#&gt; [&#39;lib64&#39;, &#39;tmp&#39;, &#39;sys&#39;, &#39;lib&#39;, &#39;proc&#39;, &#39;etc&#39;, &#39;run&#39;, &#39;dev&#39;, &#39;boot&#39;, &#39;srv&#39;, &#39;opt&#39;, &#39;home&#39;, &#39;mnt&#39;, &#39;usr&#39;, &#39;var&#39;, &#39;bin&#39;, &#39;sbin&#39;, &#39;media&#39;, &#39;root&#39;, &#39;.dockerenv&#39;]</code></pre>
+<pre><code>#&gt; [&#39;lib&#39;, &#39;media&#39;, &#39;home&#39;, &#39;sbin&#39;, &#39;sys&#39;, &#39;var&#39;, &#39;root&#39;, &#39;run&#39;, &#39;boot&#39;, &#39;etc&#39;, &#39;opt&#39;, &#39;tmp&#39;, &#39;proc&#39;, &#39;srv&#39;, &#39;usr&#39;, &#39;bin&#39;, &#39;dev&#39;, &#39;lib64&#39;, &#39;mnt&#39;, &#39;.dockerenv&#39;]</code></pre>
 <p>These files aren’t anywhere (obvious) on your computer — they are <em>inside the Python 3 Docker image</em>.</p>
-<p>If you want your Rmarkdown Docker blocks to see the normal files on your computer, use the <code>share.files=TRUE</code> block option to share your RStudio working directory with the Docker image:</p>
+<p>If you want your Rmarkdown Docker blocks to see the normal files on your computer, use the <code>share.files=TRUE</code> block option to share your RStudio working directory with the Docker image. (On Windows, you first have to <a href="https://docs.docker.com/docker-for-windows/#shared-drives">share your drives with Docker</a> in Docker settings.) For example:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="st">```</span><span class="dt">{r engine=&quot;docker&quot;, image=&quot;python:3&quot;, share.files=TRUE}</span></a>
 <a class="sourceLine" id="cb11-2" title="2"><span class="dt">import os</span></a>
 <a class="sourceLine" id="cb11-3" title="3"><span class="dt">print(os.listdir())</span></a>
@@ -395,20 +394,23 @@ This source file has all sorts of Rmarkdown-inside-Rmarkdown and Docker-inside-D
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="st">```</span><span class="dt">{r engine=&quot;docker&quot;, image=&quot;ubuntu:latest&quot;, command=&quot;bash&quot;}</span></a>
 <a class="sourceLine" id="cb13-2" title="2"><span class="dt">uname -a</span></a>
 <a class="sourceLine" id="cb13-3" title="3"><span class="st">```</span></a></code></pre></div>
-<pre><code>#&gt; Linux 7921c4ed9a5a 4.4.0-166-generic #195-Ubuntu SMP Tue Oct 1 09:35:25 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux</code></pre>
+<pre><code>#&gt; Linux aa3c7748fbd1 4.4.0-169-generic #198-Ubuntu SMP Tue Nov 12 10:38:00 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux</code></pre>
 <p>Let’s take a moment to pause here and appreciate what just happened there: your computer — regardless of what operating system is installed on it — downloaded a copy of Ubuntu Linux, started it inside an isolated session, fed a chunk of your Rmarkdown file into a Linux command inside that session, and fed the output of that command into your Rmarkdown file.</p>
 </div>
 <div id="shorthands" class="section level2">
 <h2>Shorthands</h2>
 <p>You will probably find yourself frequently using the same Docker images and commands over and over again. For example, you may have multiple Rmarkdown blocks that you want to run in Python, without having to repeat the Python Docker options every time.</p>
-<p>To accomplish this, use <code>docknitr::docker_alias</code>. For example, run this to configure <code>engine=&#39;python-docker&#39;</code> as shorthand for <code>engine=&#39;docker&#39;, image=&quot;python:3&quot;, share.files=TRUE</code>:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">docknitr<span class="op">::</span><span class="kw">docker_alias</span>(<span class="st">&quot;python-docker&quot;</span>, <span class="dt">image=</span><span class="st">&quot;python:3&quot;</span>, <span class="dt">share.files=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<p>Now you can use <code>python-docker</code> as its own Rmarkdown chunk type:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="st">```</span><span class="dt">{r engine=&quot;python-docker&quot;}</span></a>
+<p>To accomplish this, use <code>docknitr::docker_alias</code>. For example, run this to configure <code>python_docker</code> as shorthand for <code>docker engine=&#39;docker&#39;, image=&quot;python:3&quot;, share.files=TRUE</code>:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">docknitr<span class="op">::</span><span class="kw">docker_alias</span>(<span class="st">&quot;python_docker&quot;</span>, <span class="dt">image=</span><span class="st">&quot;python:3&quot;</span>, <span class="dt">share.files=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<p>Your shorthand has to be recognizable by knitr; by default, this means that it must can’t contain anything other than letters, numbers, and underscores.</p>
+<p>Now you can use <code>python_docker</code> as its own Rmarkdown chunk type:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="st">```</span><span class="dt">{python_docker}</span></a>
 <a class="sourceLine" id="cb16-2" title="2"><span class="dt">import os</span></a>
 <a class="sourceLine" id="cb16-3" title="3"><span class="dt">print(os.listdir())</span></a>
 <a class="sourceLine" id="cb16-4" title="4"><span class="st">```</span></a></code></pre></div>
-<pre><code>#&gt; [&#39;pyseer-tutorial&#39;]</code></pre>
+<pre class="python_docker"><code>import os
+print(os.listdir())
+#&gt; [&#39;pyseer-tutorial&#39;]</code></pre>
 <p>That covers the basics of getting up-and-running with Docker in Rmarkdown. This much will be useful to you if you want to run code through existing software environments, such as the plain install of Python 3. The next level of Docker power is making your custom software environments. When you are ready for that, check out the <a href="custom-images.html">custom images</a> vignette.</p>
 </div>
 

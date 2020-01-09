@@ -2,22 +2,24 @@
 % Please edit documentation in R/docknitr.R
 \name{docker_alias}
 \alias{docker_alias}
-\title{Create an alias for a Docker Rmarkdown engine}
+\title{Create an alias for a Docker R markdown engine}
 \usage{
 docker_alias(name, ...)
 }
 \arguments{
-\item{name}{The name of a new Docker Rmarkdown engine}
+\item{name}{The name of a new Docker R markdown engine}
 
-\item{...}{options for the new Docker Rmarkdown engine}
+\item{...}{Options for the new Docker R markdown engine}
 }
 \description{
-After writing
+Create an alias for a Docker R markdown engine
 }
 \details{
-docker_alias("ubuntu", image="ubuntu:latest", command="bash")
+For example, after writing
+  \preformatted{docker_alias("ubuntu", image="ubuntu:latest", command="bash")}
+you can use \samp{```\{ubuntu\}} instead of \samp{```\{r engine="docker", image="ubuntu:latest", command="bash"\}} to process R markdown chunks through Ubuntu bash using Docker
 
-you can use ```{r engine="ubuntu"} to process Rmarkdown chunks through Ubuntu bash using Docker
+The alias name must consist entirely of letters, digits, and underscores, or else `knitr` will not recognize it as a valid code chunk in R markdown.
 }
 \examples{
 docker_alias("ubuntu", image="ubuntu:latest", command="bash")
